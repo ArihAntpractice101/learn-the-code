@@ -1,0 +1,55 @@
+model: # details of model (customizable) {required}
+  name: "resnet" # name of the model (will be used to store .pth file and loss graph) {required}
+  base_path: "./results" # path to store results of the model (will be used to store .pth file and loss graph) {required}
+
+  conv_layers: # details of layers' blocks of resnet part (customizable (you may add subtract similar blocks in here)) {required}
+    - out_channels: 8 # output channels for the block {required}
+      kernel_size: 3 # kernal size for the convolution {required}
+      pooling: True # maxpooling {required}
+      activation: True # relu {required}
+
+    - out_channels: 16
+      kernel_size: 3
+      pooling: False
+      activation: True
+
+    - out_channels: 32
+      kernel_size: 3
+      pooling: True
+      activation: True
+
+    - out_channels: 32
+      kernel_size: 3
+      pooling: False
+      activation: True
+
+    - out_channels: 32
+      kernel_size: 3
+      pooling: False
+      activation: False
+
+  skip_connections: # details of skip connections in between blocks/layers (customizable (you may add subtract similar connections in here)) {required}
+    - from_layer: 0 # {required}
+      to_layer: 2 # {required}
+      type: "conv+pool" # use when there is/is'nt size mismatch
+
+    - from_layer: 2
+      to_layer: 4
+      type: "add" # can only be used when theres no size mismatch
+
+  fc_layers: [64, 64] # fully connected layer for the ann part of the complete model {required}
+
+  add_magnitude_ann: # used only when use_phase_mag is True (this is the ann addition for using phase magnitude (middle strips only)) {required}
+    hidden_layers: [128, 64] # fully connected layer for the phase_mag part of the complete model {required}
+    merge_strategy: "concat" # output will be combined to the original model {required}
+
+training:
+  learning_rate: 1e-3 # learning rate for the model {required}
+  batch_size: 32 # batch size {required}
+  num_epochs: 50 # no of epochs {required}
+  optimizer: "Adam" # optimizer {required}
+
+dataset:
+  transform: "sqrt" # transformation {required}
+  use_defocus: True # use defocused image {required}
+  use_phase_mag: False # use phase magnitude strips {required}

@@ -1,0 +1,55 @@
+dataset: # {required}
+  num_samples: 100 # No of samples (entries/rows/documents) you want to have in the collection [must be a positive integer] {required}
+  index_starts_with: 1 # index value to begin with (for documents) [must be a positive integer] {required}
+  sampling_method: "sobol" # sampling technique to be used [for now only sobol is implemented, so must be sobol] {required}
+  seed: 2025 # random seeding for reproducibility (across dataset generation and model as well, hence the same model and same number of samples with all preprocessing steps same will lead to exact same model) [must be a number] {required}
+
+mongodb: # {required}
+  uri: "mongodb://localhost:27017/"  # URI for connecting to the MongoDB server (IP address and port) (must be a string) {required}
+  database: "zemax" # Name of the MongoDB database to use (must be a string) {required}
+  collection: "sec_pstn10" # Name of the collection within the database (this is where documents are stored) (must be a string) {required}
+
+wavelength: 0.632 # wavelength of the system (in microns) [must be a number] {required}
+global_defocus: 10 # global defocus for the system, if this is 0, only nominal image will be stored else both nominal and defocused [must be a number] {required}
+
+zemax: # {required}
+  lens_file_path: "C:/Users/vb10/Desktop/zmxfiles/zmxfile.ZMX" # zemax lens file path [must be a string] {required}
+  config_file_path: "C:/Users/vb10/Desktop/zmxfiles/zmxfile.CFG" # zemax config file path [must be a string] {required}
+  sampling: 2 # sampling of 1 indicates sampling of (32,32) hence image size of (64,64) and so on upto 10 [must be a positive integer and from 1 to 10 only] {required}
+
+primary_mirror: # {required}
+  segments: # {required}
+    - id: 1 # id indicates segment number [must be from 1 to 6 and all must be present] {required}
+      piston: { static : 0.0 } # each of piston, tip and tilt must be present, and they must have either of static (constant value) [must be a number], range (on which params to train) [must be a list from start to end] and untrained_range (they are vairiable, they are used to add variaility to the data) [must be a list from start to end] {required}
+      tip: { static : 0.0 } # {required}
+      tilt: { static : 0.0 } # {required}
+
+    - id: 2 # {required}
+      piston: { static : 0.0 } # {required}
+      tip: { static : 0.0 } # {required}
+      tilt: { static : 0.0 } # {required}
+
+    - id: 3 # {required}
+      piston: { static : 0.0 } # {required}
+      tip: { static : 0.0 } # {required}
+      tilt: { static : 0.0 } # {required}
+
+    - id: 4 # {required}
+      piston: { static : 0.0 } # {required}
+      tip: { static : 0.0 } # {required}
+      tilt: { static : 0.0 } # {required}
+
+    - id: 5 # {required}
+      piston: { static : 0.0 } # {required}
+      tip: { static : 0.0 } # {required}
+      tilt: { static : 0.0 } # {required}
+
+    - id: 6 # {required}
+      piston: { static : 0.0 } # {required}
+      tip: { static : 0.0 } # {required}
+      tilt: { static : 0.0 } # {required}
+
+secondary_mirror: # {required}
+  piston: { range : [-10,10] } # {required}
+  tip: { static : 0.0 } # {required}
+  tilt: { static : 0.0 } # {required}
